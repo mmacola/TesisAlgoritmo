@@ -50,6 +50,12 @@ No serian salas, sino MATCH uno a uno. ¿QUE OPINAN? (O hacemos salas y ademas c
 
 
 **************************************************************
+MAKE?? 
+
+Agregar comandos para compilar.
+
+
+**************************************************************
 
 <span style="color: blue"> **COMENTARIOS DEL PROFE**</span>
 
