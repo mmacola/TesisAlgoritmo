@@ -15,8 +15,8 @@ url2="https://docs.google.com/spreadsheets/d/e/2PACX-1vSOnu6I8BcHqvLOPNV9dyW8A-u
 tutores=pd.read_csv(url2)
 df2=pd.DataFrame(tutores)
 
-def match():
-    #Definimos las dimensiones que necesitamos segun el TEST de Autoconcepto.
+def academico():
+    #Definimos las dimensiones que necesitamos segunGRAC el TEST de Autoconcepto.
 
     dfAcademico=pd.DataFrame(informacion,columns=[
         '1) Hago bien los trabajos escolares (profesionales).',  
@@ -26,7 +26,10 @@ def match():
         '21)  Soy un buen estudiante.',
         '26) Mis profesores me consideran inteligente y trabajador.'
         ])
+    return dfAcademico.sum(axis=1)/60
 
+
+def social():
     dfSocial=pd.DataFrame(informacion,columns=[
         '2)  Hago fácilmente amigos.', '3) Tengo miedo de algunas cosas.',
         '7) Soy una persona amigable.', '8) Muchas cosas me ponen nervioso.',
@@ -35,7 +38,11 @@ def match():
         '22) Me cuesta hablar con desconocidos.',
         '27) Tengo muchos amigos.'
         ])
+    return dfSocial.sum(axis=1)/60
+    
 
+
+def emocional():
     dfEmocional=pd.DataFrame(informacion,columns=[
         '3) Tengo miedo de algunas cosas.',
         '8) Muchas cosas me ponen nervioso.',
@@ -44,26 +51,26 @@ def match():
         '23) Me pongo nervioso cuando me pregunta el profesor.',
         '28) Me siento nervioso.'
         ])
-
-    Academico = dfAcademico.sum(axis=1)/60
-    Social = dfSocial.sum(axis=1)/60
-    Emocional = (600-dfEmocional.sum(axis=1))/60
-
-    Calculo = (Academico + Social + Emocional)/3
-
-    new_df=df.assign(Calculo = (Calculo)).sort_values(by=['Calculo'], ascending=True)
-    #Agregué la columna de Ranking.
-    new_df2=new_df.assign(Ranking= (df.index+1))
-    #print(new_df2)
-
-    #NO PUDE AGREGAR LAS 2 COLUMNAS EN SIMULTANEO, seguro que hay alguna forma.
-
-    #Match entre Extranjero y Alumno de la UM.
-    new_df3=pd.merge(df2,new_df2,on='Ranking').sort_values(by=['Ranking'], ascending=True)
-    #print(new_df3.columns)
-    print(new_df3[['Ranking','ALUMNO UM',  'Correo','Calculo']])
+    return (600-dfEmocional.sum(axis=1))/60
    
+
+def Match():
+    calculo = (academico() + social() + emocional())/3
+
+    new_df=df.assign(calculo = (calculo)).sort_values(by=['calculo'], ascending=True)
+        #Agregué la columna de Ranking.
+    new_df2=new_df.assign(Ranking= (df.index+1))
+        #print(new_df2)
+
+        #NO PUDE AGREGAR LAS 2 COLUMNAS EN SIMULTANEO, seguro que hay alguna forma.
+
+        #Match entre Extranjero y Alumno de la UM.
+    new_df3=pd.merge(df2,new_df2,on='Ranking').sort_values(by=['Ranking'], ascending=True)
+    print(new_df3[['Ranking','ALUMNO UM',  'Correo','calculo']])
+
+
 if __name__ == '__main__':
-    p = Process(target=match, )
+    p = Process(target=Match, )
+
     p.start()
     p.join()
