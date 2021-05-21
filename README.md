@@ -12,61 +12,88 @@ Se presenta la arquitectura del proyecto.
 ******
 
 
-🛑 **Login** (Autentificación).🛑 <span style="color: red"> Mejorar, esta muy básico.</span>
 
 *************************
 
 🆗 **ALGORITMO DE MATCH**🆗 <span style="color: green"> HECHO!!! ;)!</span>
 
-Lo resolvi utilizando PANDAS.
-Abrir respuestasExtranjeros.csv y respuestasAlumnos.csv.
-Abro estos archivos .csv y le realizo distintas operaciones. 
-El algoritmo del MATCH ya lo programé y se llama MATCH20.py
+Utilicé la biblioteca PANDAS,me pareció una buena alternativa para trabajar con los archivos .csv que traía las respuestas del formulario. 
 
-* Debería resolver como agregarlo a la parte del servidor como funciones o ver de crear un nuevo servidor para que realice estas operaciones.
-¿Qué opinan?
+Trabajé los distintos archivos a través de Dataframe (parseo y analizo).
+
+Realicé los cálculos, de las métricas que explicaremos en detalle a continuación, con procesos y cree un nuevo Dataframe por cada dimensión. 
+
+Y con las respuestas obtenidas, las pude cruzar en un Macth, entre la lista de estudiantes extranjeros y estudiantes locales.
+
+Detalle:
+https://docs.google.com/document/d/e/2PACX-1vQEeJ-riwPwUHPxhOjtcLMin_WpuUZVRqguq4UTJ_RtQbiKH97mNJ4JtUhfe6mw_ZLeSLBqB9CY20ou/pub
+
+Observación:
+
+Abrir respuestasExtranjeros.csv y respuestasAlumnos.csv (que se encuentran en drive), a traves de url.
+
+Abro estos archivos .csv y le realizo distintas operaciones. 
+
+El algoritmo del MATCH ya lo programé y se llama MATCH20.py.
 
 *************************
 
-💡 **CHAT** 💡 <span style="color: yellow"> Tengo algo programado, pero habría que retocarlo.</span>
+💡 **CHAT** 💡 <span style="color: yellow"> </span>
+
+El servidor se queda conectado a una sola conexión y pone en espera las demás. 
+Una buena solución que encontré fue llamar al método setblocking (que tiene un booleano, en este caso “False”).
+
+* Socket bloqueante/nobloqueante es un modo. 
+* Cuando uso un socket bloqueante, al hacer una llamada a recv() el proceso queda bloqueado hasta que llegan datos. Es algo parecido a leer del teclado (que también puede ser bloqueante o no).
+* nda bien cuando sólo manejo un dispositivo asíncrono (socket). El problema se puede resolver con hilos.
+* select() permite manejar en un solo punto varios descriptores asíncronos, de modo que cuando lees o escribes en un dispositivo (incluye a los sockets) ya sabes de antemano que hay algo para leer o escribir, de modo que evitas que te bloquee el proceso.
+* Si uso select() no hay mucha diferencia entre usar bloqueantes o no. Y puestos a elegir, son preferibles los bloqueantes.
 
 * **SERVIDOR**
 
-Servidor utilizando SOCKET.
-server.bind((host,port))#Pasa los datos de conexion
-server.listen() #El servidor esta a la escucha de los clientes
+Servidor utilizando SOCKET, MULTIHILO.
+
+* server.bind((host,port))#Pasa los datos de conexion
+* server.listen() #El servidor esta a la escucha de los clientes
 Por cada cliente que se conecte, el servidor va a crear un hilo para que cada cliente tenga una funcion "Handdle" dedicada a ese cliente.
-Funcion Handdle maneja mensajes de cada cliente
-Los hilos corren al mismo tiempo y manejan los mensajes de c/cliete por separado.
+* Funcion Handdle maneja mensajes de cada cliente
+* Los hilos corren al mismo tiempo y manejan los mensajes de c/cliete por separado.
 
 * **CLIENTE**
+
+Utilizamos hilos. Dejamos vivo el hilo principal para manejar los mensajes.
 
 Creamos 2 hilos.
 Un hilo para la funcion "Recibir mensajes".
 Un hilo para la funcion "Escribir mensajes".
 Para que esten corriendo al mismo tiempo
 
-No serian salas, sino MATCH uno a uno. ¿QUE OPINAN? (O hacemos salas y ademas chat uno a uno).
+Seria una sala de chat, y cuando el cliente pide informacion sobre su Macth, el servidor le responde.
 
 
 **************************************************************
-MAKE?? 
+DESARROLLANDO
+
+💡 IPC 💡 
+
+IPC (conectar con colas entre el servidor y el  match).
+
+Agregar comando al servidor que cuando encuentre “/match” imprimir mensaje “llego el pedido de match del usuario tal…”
+(Tendría que hacer la parte del comando del match, y que el servidor entienda que es un comando y que ponga el mensaje en la cola, el match lea y responda).
+
+Colas de match de lo que quiero hacer, cada cliente que pida su match, el servidor parsea y mete el mail del match en la cola,  se fija si hay un nuevo elemento en la cola, después se despierta y le manda el resultado.
+Cola para mandar info entre el servidor y el match (mandar respuesta del match al servidor).
+
+Cuando corra este archivo, lo corra una sola vez cuando arranque y quede esperando en un while, esperando a alguna comunicación entre procesos con el servidor. 
+Ejemplo, while sleep(5) y que pregunte si hay match.
+
+**************************************************************
+PENDIENTE
+
+💡  MAKEFILE  💡
 
 Agregar comandos para compilar.
 
-
 **************************************************************
 
-<span style="color: blue"> **COMENTARIOS DEL PROFE**</span>
-
 🇯🇵 🇰🇷 🇩🇪 🇨🇳 🇺🇸 🇫🇷 🇪🇸 🇮🇹 🇷🇺 🇬🇧 🇯🇵 🇰🇷 🇩🇪 🇨🇳 🇺🇸 🇫🇷 🇪🇸 🇮🇹 🇷🇺 🇬🇧🇯🇵 🇰🇷 🇩🇪 🇨🇳 🇺🇸 🇫🇷 🇪🇸 🇮🇹 🇷🇺 🇬🇧
-
-Herramientas para usar, Justificar IPC (si uso Multi hilo o multiproceso decir el xq)
-Chat, como armarlo (arquitectura con diagrama).
-
-(Creo que como lo programé, puede ser la arquitectura completa, CONFIRMENME)
-Solo la izquierda de la arquitectura del diagrama presentado.
-
-Se puede usar las bibliotecas que queramos, pero entender los metodos que tiene y como usarla.
-
-
