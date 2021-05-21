@@ -26,7 +26,7 @@ class Cliente(): #el cliente no hereda de ninguna otra clase
 		msg_recv.daemon = True #Lo inicializamos con un daemon, para que este ligado al hilo principal del programa y cuando se cierre el programa, el hilo se muera y no que quede como un proceso andando. 
 		msg_recv.start()  #aca lo corremos
 
-		self.usuarios = []
+		self.usuarios = [] 
 
 		self.send_msg(name + "&login")
 		

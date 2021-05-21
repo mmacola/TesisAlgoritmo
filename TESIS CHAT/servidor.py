@@ -22,7 +22,7 @@ class Servidor():
 		aceptar.daemon = True #evita los procesos zombies
 		aceptar.start()
 
-		procesar.daemon = True
+		procesar.daemon = True 
 		procesar.start()
 
 		while True:#El ciclo que mantiene vivo el hilo principal
