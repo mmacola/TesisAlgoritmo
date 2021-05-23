@@ -15,7 +15,6 @@ url1="https://docs.google.com/spreadsheets/d/e/2PACX-1vRmFZT3OcFlVbzLSvYSkWgbY6f
 informacion=pd.read_csv(url1)
 df=pd.DataFrame(informacion)
 
-user = input("Enter your mail: ")
 
 def academico():
     #Definimos las dimensiones que necesitamos segunGRAC el TEST de Autoconcepto.
@@ -76,6 +75,8 @@ def Match():
 
 
 if __name__ == '__main__':
+
+    user = input("Enter your mail: ")
     p = Process(target=Match, )
     p.start()
     p.join()
