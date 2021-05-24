@@ -2,6 +2,10 @@ import socket
 import threading
 import sys
 import pickle
+import match20
+
+
+
 
 class Servidor():
 	"""docstring for Servidor"""
@@ -32,17 +36,27 @@ class Servidor():
 				sys.exit()
 			if msg == 'list':
 				print(self.usuarios)
+			elif msg == 'match':
+				print(self.usuarios)
+				match20.match
 			else:#de lo contrario que no haga nada
 				pass
 
 
-	def msg_to_all(self, msg, cliente):#Este metodo lo que hace es que recorre todos los clientes y que el cliente al que le vamos a mandar el mensaje sea distinto al que envia el mensaje
-		for c in self.clientes:#recorremos nuestro arreglo de clientes y por cada cliente validamos que el que envia el msg sea distinto al que lo envia
+	def msg_to_all(self, msg, cliente):
+		#Este metodo lo que hace es que recorre todos los clientes y que el cliente al que le vamos a 
+		#mandar el mensaje sea distinto al que envia el mensaje
+		for c in self.clientes:
+			#Recorremos nuestro arreglo de clientes y por cada cliente validamos que el que 
+			# envia el msg sea distinto al que lo envia
 			try:
 				if c != cliente:
-					c.send(msg)#no hace falta serializar porque el servidor es un espejo, solo repite tal cual.
+					c.send(msg)
+					#no hace falta serializar porque el servidor es un espejo, 
+					#solo repite tal cual.
 			except:
-				self.clientes.remove(c) #si no me puedo comunicar elimino el cliente del arreglo
+				self.clientes.remove(c) 
+				#si no me puedo comunicar elimino el cliente del arreglo.
 
 	def aceptarCon(self): # ACEPTA CONEXIONES
 		print("aceptarCon iniciado") 
