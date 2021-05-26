@@ -1,10 +1,11 @@
+
 # um_Trabajo_Final
 **Projecto final.**
 
 
 Se presenta la arquitectura del proyecto.
 
-![Arquitectura25052021](https://user-images.githubusercontent.com/10929077/119603086-e77d8480-bdc2-11eb-8631-35dcbb6cb5c3.png)
+![Arquitectura](https://user-images.githubusercontent.com/10929077/119674081-49b1a600-be12-11eb-96de-b48099acea65.png)
 
 ******
 **MATCH Y CHAT**
