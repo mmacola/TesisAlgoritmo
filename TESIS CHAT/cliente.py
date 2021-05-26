@@ -14,7 +14,7 @@ import match
 class Cliente(): #el cliente no hereda de ninguna otra clase
 	"""docstring for Cliente"""
 	print(datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))
-	print("Ingresar usuario y legajo: ")
+	print("Ingresar nick: ")
 	client_name=input()#Lo guardo en una variable
 
 	def __init__(self, host="localhost", port=4000,name=client_name): #inicializamos la clase, con sus valores necesarios Self si mismo, puerto y nombre de cliente
