@@ -2,7 +2,10 @@ import socket
 import threading
 import sys
 import pickle
-import match20
+import multiprocessing
+import pandas as pd
+from multiprocessing import Process
+import numpy as np
 
 
 
@@ -37,8 +40,7 @@ class Servidor():
 			if msg == 'list':
 				print(self.usuarios)
 			elif msg == 'match':
-				print(self.usuarios)
-				match20.match
+				print("Tu match es: ")
 			else:#de lo contrario que no haga nada
 				pass
 

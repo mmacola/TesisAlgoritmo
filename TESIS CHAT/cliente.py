@@ -3,7 +3,9 @@ import threading
 import sys
 import pickle
 import datetime
-import match20
+
+from numpy import mat
+import match
 
 #Python cuando trabaja con sockets, esta en modo Bloqueante, quiere decir que se queda enchufado a la primer conexion que recibe
 #al momento de conectarse al servidor, el servidor se queda enchufado al primer cliente y el segundo queda a la espera
@@ -37,7 +39,7 @@ class Cliente(): #el cliente no hereda de ninguna otra clase
 			if msg == 'list':#listamos los usuarios
 				print(self.usuarios)#Imprimimos la lista de Usuarios
 			elif msg == 'match':
-				match20.match
+				match.match()
 				#print(self.usuarios)#Imprimimos la lista de Usuarios
 			else:
 				if msg == 'exit':
