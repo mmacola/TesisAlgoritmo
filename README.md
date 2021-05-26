@@ -4,8 +4,7 @@
 
 Se presenta la arquitectura del proyecto.
 
-![ArquitecturaServidor](https://user-images.githubusercontent.com/10929077/115784852-0ab4ae80-a395-11eb-932d-336c8fa7b1e7.png)
-
+![Arquitectura25052021](https://user-images.githubusercontent.com/10929077/119603086-e77d8480-bdc2-11eb-8631-35dcbb6cb5c3.png)
 
 ******
 **MATCH Y CHAT**
