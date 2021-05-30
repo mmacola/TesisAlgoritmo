@@ -7,9 +7,6 @@ import pandas as pd
 from multiprocessing import Process
 import numpy as np
 
-
-
-
 class Servidor():
 	"""docstring for Servidor"""
 	def __init__(self, host="localhost", port=4000):#si le dejo el localhost queda "bloqueado" a recibir solo conexiones que provienen de localhost
@@ -82,7 +79,23 @@ class Servidor():
 							self.controlUsuarios(pickle.loads(data)) #deserializo el mensaje para parsearlo
 					except:
 						pass
-		
+
+#mail_in, mail_out = os.pipe()
+#match_in, match_out = os.pipe()
+#pid = os.fork()
+#if pid > 0
+# estoy en server, escribe
+#cierro el in
+#os.close(mail_in)
+#os.close(match_out)
+#else:
+#estoy en el hijo
+#os.close(mail_out)
+#os.close(match_in)
+#match.match
+#os.write(mail_out, nombre[posision])
+
+
 	def controlUsuarios(self, msg):
 		if (msg.find('&') != -1): #busco mensajes internos
 			nombre = msg.split("&")
@@ -92,6 +105,15 @@ class Servidor():
 			if nombre[1] == "logoff":
 				print(nombre[0] + " se ha ido")
 				self.usuarios.remove(nombre[0])
-
+		#if(msg.find('%') != -1): #busco mensajes de mail
+			#if pid > 0:
+			#os.write(mail_out, msg)
+			#while()
+			#os.read(match_in, match)
+			#if(match > 0)
+			#msg_to_all(self,"tu match es " match_in, cliente)
+			#else:
+			#(...) vas a llamar el metodo match.match
+# recibo el mail y llamo a match con ese dato
 
 s = Servidor()

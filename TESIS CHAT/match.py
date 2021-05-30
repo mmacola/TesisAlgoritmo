@@ -1,6 +1,7 @@
 import pandas as pd
 from multiprocessing import Process
 import numpy as np
+#import loginTxt
 
 #https://docs.python.org/2/library/multiprocessing.html#
 #https://www.geeksforgeeks.org/multiprocessing-python-set-1/
@@ -14,8 +15,8 @@ df0=pd.DataFrame(tutores)
 url1="https://docs.google.com/spreadsheets/d/e/2PACX-1vRmFZT3OcFlVbzLSvYSkWgbY6fUz7_lxScDXc5sbFpt1jPC83hDDqwzU6tzvwtGOQLK1NyVXJ9DYkVA/pub?output=csv"
 informacion=pd.read_csv(url1)
 df=pd.DataFrame(informacion)
-
 user = input("Enter your mail: ")
+#loginTxt.main()
 
 def academico():
     #Definimos las dimensiones que necesitamos segunGRAC el TEST de Autoconcepto.
