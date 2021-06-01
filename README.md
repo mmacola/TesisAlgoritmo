@@ -5,7 +5,8 @@
 
 Se presenta la arquitectura del proyecto.
 
-![Arquitectura](https://user-images.githubusercontent.com/10929077/119674081-49b1a600-be12-11eb-96de-b48099acea65.png)
+![WhatsApp Image 2021-06-01 at 07 37 33](https://user-images.githubusercontent.com/10929077/120315160-6a667980-c2b2-11eb-89cc-fcb6084cff9c.jpeg)
+
 
 ******
 **MATCH Y CHAT**
@@ -45,7 +46,7 @@ Una buena solución que encontré fue llamar al método setblocking (que tiene u
 
 * Socket bloqueante/nobloqueante es un modo. 
 * Cuando uso un socket bloqueante, al hacer una llamada a recv() el proceso queda bloqueado hasta que llegan datos. Es algo parecido a leer del teclado (que también puede ser bloqueante o no).
-* nda bien cuando sólo manejo un dispositivo asíncrono (socket). El problema se puede resolver con hilos.
+* Anda bien cuando sólo manejo un dispositivo asíncrono (socket). El problema se puede resolver con hilos.
 * select() permite manejar en un solo punto varios descriptores asíncronos, de modo que cuando lees o escribes en un dispositivo (incluye a los sockets) ya sabes de antemano que hay algo para leer o escribir, de modo que evitas que te bloquee el proceso.
 * Si uso select() no hay mucha diferencia entre usar bloqueantes o no. Y puestos a elegir, son preferibles los bloqueantes.
 
@@ -71,5 +72,21 @@ Para que esten corriendo al mismo tiempo
 Seria una sala de chat, y cuando el cliente pide informacion sobre su Macth, a este le devuelven la información pedida(mail).
 
 **************************************************************
+**INSTALACION**
+
+1. Clonar repositorio
+2. Se recomienda utilizar un entorno virtual para no instalar las librerias de forma global
+3. Ejecutar:
+''
+pip install -r requirements.txt
+''
+4. Prender el servidor.
+''
+python /servidor.py
+''
+5. Prender todos el/los clientes.
+''
+python /cliente.py
+''
 
 🇯🇵 🇰🇷 🇩🇪 🇨🇳 🇺🇸 🇫🇷 🇪🇸 🇮🇹 🇷🇺 🇬🇧 🇯🇵 🇰🇷 🇩🇪 🇨🇳 🇺🇸 🇫🇷 🇪🇸 🇮🇹 🇷🇺 🇬🇧🇯🇵 🇰🇷 🇩🇪 🇨🇳 🇺🇸 🇫🇷 🇪🇸 🇮🇹 🇷🇺 🇬🇧
