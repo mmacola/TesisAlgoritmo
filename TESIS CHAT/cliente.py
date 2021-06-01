@@ -13,21 +13,30 @@ import match
 #conexion que recibe al momento de conectarse al servidor, el servidor se queda enchufado 
 #al primer cliente y el segundo queda a la espera la forma de que esto no suceda es:
 
-def get_match_info(name): 
-	#* Este es el proceso padre el cual invoca al hijo.
+print("************INFORMACION*****************")
+print("'match': Trae el alumno asignado.")
+print("'list': Lista de los alumnos conectados.")
+print("'exit': Sale de la aplicacion.")
+print("****************************************")
+
+def get_match_info(name):
+    	#* Este es el proceso padre el cual invoca al hijo.
     pipein, pipeout = os.pipe()
     if os.fork() == 0:
         os.close(pipein)
         match_proccess_invoker(pipeout, name) 
-		#* Si fork == 0 entonces quiere decir que soy el hijo y como soy el hijo ejecuto 
-		#el proceso de buscar el match.
+        #* Si fork == 0 entonces quiere decir que soy el hijo y como soy el hijo ejecuto 
+    	#el proceso de buscar el match.
     else:
         os.close(pipeout)
         pipein = os.fdopen(pipein)
         msg = pipein.readline()[:-1]  
 		#* Como soy el padre me quedo escuchando el pipe a ver que cuenta mi hijo.
         print(f'{msg}')
-        os.close(pipein)
+        #os.close(pipein)
+
+        #* Como soy el padre me quedo escuchando el pipe a ver que cuenta mi hijo.
+
 
 def match_proccess_invoker(pipeout, name):
     msg = match.match(name)  #* Llamo a la funcion match.
