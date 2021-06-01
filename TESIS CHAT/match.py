@@ -1,10 +1,6 @@
 import pandas as pd
 from multiprocessing import Process
 import numpy as np
-#import loginTxt
-
-#https://docs.python.org/2/library/multiprocessing.html#
-#https://www.geeksforgeeks.org/multiprocessing-python-set-1/
 
 #DataFrame TUTORES
 url0="https://docs.google.com/spreadsheets/d/e/2PACX-1vSOnu6I8BcHqvLOPNV9dyW8A-umuMNcx-h8V1rUaHIlCcPl8eTgRdehUWnd-n0xWDWPBPn2uQ7XqEWn/pub?gid=609779175&single=true&output=csv"
@@ -15,16 +11,13 @@ df0=pd.DataFrame(tutores)
 url1="https://docs.google.com/spreadsheets/d/e/2PACX-1vRmFZT3OcFlVbzLSvYSkWgbY6fUz7_lxScDXc5sbFpt1jPC83hDDqwzU6tzvwtGOQLK1NyVXJ9DYkVA/pub?output=csv"
 informacion=pd.read_csv(url1)
 df=pd.DataFrame(informacion)
-user = input("Enter your mail: ")
-#loginTxt.main()
 
 def academico():
-    #Definimos las dimensiones que necesitamos segunGRAC el TEST de Autoconcepto.
-
+    #Definimos las dimensiones que necesitamos segun el TEST de Autoconcepto.
     dfAcademico=pd.DataFrame(informacion,columns=[
-        '1) Hago bien los trabajos escolares (profesionales).',  
+        '1) Hago bien los trabajos escolares (profesionales).',
         '6) Mis profesores me consideran un buen trabajador.',
-        '11) Trabajo mucho en clase.', 
+        '11) Trabajo mucho en clase.',
         '16) Mis profesores me estiman.',
         '21)  Soy un buen estudiante.',
         '26) Mis profesores me consideran inteligente y trabajador.'
@@ -41,44 +34,50 @@ def social():
         '27) Tengo muchos amigos.'
         ])
     return dfSocial.sum(axis=1)/60
-    
+
 def emocional():
     dfEmocional=pd.DataFrame(informacion,columns=[
         '3) Tengo miedo de algunas cosas.',
         '8) Muchas cosas me ponen nervioso.',
-        '13) Me asusto con facilidad.', 
+        '13) Me asusto con facilidad.',
         '18) Cuando los mayores dicen algo me pongo muy nervioso.',
         '23) Me pongo nervioso cuando me pregunta el profesor.',
         '28) Me siento nervioso.'
         ])
     return (600-dfEmocional.sum(axis=1))/60
 
-def match():
+def match(user, printable=False):
     calculo = (academico() + social() + emocional())/3
-    
+
     df1=df.assign(calculo = (calculo)).sort_values(by=['calculo'], ascending=True)
     #Agregué la columna de Ranking.
     df2=df1.assign(Ranking= (df.index+1))
     #Match entre Extranjero y Alumno de la UM.
     df3=pd.merge(df0,df2,on='Ranking').sort_values(by=['Ranking'], ascending=True)
     #Buscar por un usuario
-    a = df3.loc[df3['ALUMNO UM'] == user]
-    b = df3.loc[df3['Correo'] == user]
-    if a.empty or b.empty:
-        if a.empty and b.empty:
-            print('Este alumno, NO tiene Match!')
+    tutor = df3.loc[df3['ALUMNO UM'] == user]
+    extranjero = df3.loc[df3['Correo'] == user]
+    result = ''
+    if tutor.empty or extranjero.empty:
+        if tutor.empty and extranjero.empty:
+            result = 'Este alumno, NO tiene Match!'
         else:
-            if a.empty:
-                print("\nTu MATCH es:")
-                print(b[['ALUMNO UM']])
+            if tutor.empty:
+                result = f"\nTu MATCH es: {extranjero[['ALUMNO UM']]}"
             else:
-                print("\nTu MATCH es:")
-                print(a[['Correo']])
-
+                result = f"\nTu MATCH es: {tutor[['Correo']]}"
+    if printable:
+        print(result)
+    return result
 
 if __name__ == '__main__':
-    
-    #user = input("Enter your mail: ")
-    p = Process(target=match, )
+
+    user = input("Enter your mail: ")
+    p = Process(target=match, args=(user, True))
     p.start()
     p.join()
+
+
+#Bibliografia
+#https://docs.python.org/2/library/multiprocessing.html#
+#https://www.geeksforgeeks.org/multiprocessing-python-set-1/
