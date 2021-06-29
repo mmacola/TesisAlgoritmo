@@ -47,6 +47,7 @@ def emocional():
     return (600-dfEmocional.sum(axis=1))/60
 
 def match(user, printable=False):
+    print('El usuario que realizo la peticion es: '+ user)
     calculo = (academico() + social() + emocional())/3
 
     df1=df.assign(calculo = (calculo)).sort_values(by=['calculo'], ascending=True)
@@ -60,12 +61,13 @@ def match(user, printable=False):
     result = ''
     if tutor.empty or extranjero.empty:
         if tutor.empty and extranjero.empty:
-            result = 'Este alumno, NO tiene Match!'
+            result = 'Este alumno, NO tiene Match!\n Contactate con el admin\n'
         else:
             if tutor.empty:
-                result = f"\nTu MATCH es: {extranjero[['ALUMNO UM']]}"
+                result = f"Tu MATCH es: {extranjero[['ALUMNO UM']]}\n"
+
             else:
-                result = f"\nTu MATCH es: {tutor[['Correo']]}"
+                result = f"Tu MATCH es: {tutor[['Correo']]}\n"
     if printable:
         print(result)
     return result
