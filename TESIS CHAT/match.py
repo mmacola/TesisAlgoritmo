@@ -3,12 +3,17 @@ from multiprocessing import Process
 import numpy as np
 
 #DataFrame TUTORES
-url0="https://docs.google.com/spreadsheets/d/e/2PACX-1vSOnu6I8BcHqvLOPNV9dyW8A-umuMNcx-h8V1rUaHIlCcPl8eTgRdehUWnd-n0xWDWPBPn2uQ7XqEWn/pub?gid=609779175&single=true&output=csv"
+urlTutor=open('tutor.txt','r')
+url0=urlTutor.read()
+print(url0)
 tutores=pd.read_csv(url0)
 df0=pd.DataFrame(tutores)
+print(df0)
+
 
 #DataFrame EXTRANJEROS
-url1="https://docs.google.com/spreadsheets/d/e/2PACX-1vRmFZT3OcFlVbzLSvYSkWgbY6fUz7_lxScDXc5sbFpt1jPC83hDDqwzU6tzvwtGOQLK1NyVXJ9DYkVA/pub?output=csv"
+urlExtranjero=open('extranjero.txt','r')
+url1=urlExtranjero
 informacion=pd.read_csv(url1)
 df=pd.DataFrame(informacion)
 
@@ -26,8 +31,8 @@ def academico():
 
 def social():
     dfSocial=pd.DataFrame(informacion,columns=[
-        '2)  Hago fácilmente amigos.', '3) Tengo miedo de algunas cosas.',
-        '7) Soy una persona amigable.', '8) Muchas cosas me ponen nervioso.',
+        '2)  Hago fácilmente amigos.', 
+        '7) Soy una persona amigable.',
         '12) Es difícil para mí hacer amigos.',
         '17) Soy una persona alegre.',
         '22) Me cuesta hablar con desconocidos.',
@@ -47,7 +52,7 @@ def emocional():
     return (600-dfEmocional.sum(axis=1))/60
 
 def match(user, printable=False):
-    print('El usuario que realizo la peticion es: '+ user)
+    print('El usuario que realizo la peticion del Match es: '+ user)
     calculo = (academico() + social() + emocional())/3
 
     df1=df.assign(calculo = (calculo)).sort_values(by=['calculo'], ascending=True)

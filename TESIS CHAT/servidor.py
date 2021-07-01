@@ -6,6 +6,7 @@ import time
 from _thread import start_new_thread
 import match
 import signal
+import argparse
 
 
 class Servidor:
@@ -13,23 +14,24 @@ class Servidor:
     list_of_clients = []
     list_of_nicks = []
 
-    def __init__(self): #El hilo principal ejecuta los siguientes metodos.
+    def __init__(self, archivo_tutores, archivo_extrangeros,ip,port):
+        self.archivo_tutores = archivo_tutores
+        self.archivo_extrangeros = archivo_extrangeros
+
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        #El indicador SO_REUSEADDR indica al kernel que reutilice un socket local en estado TIME_WAIT, sin esperar a que expire su tiempo de espera natural.
-        IP_address = 'localhost'
-        Port = 4000
+        #IP_address = 'localhost'
+        #Port = 4000
 
-        server.bind((IP_address, Port))
+        server.bind((ip, port))
         server.listen(100)
         print('Escuchando conexiones...')
 
-        while True: #Crea un nuevo hilo por cada nuevo cliente que se conecta.
+        while True:
             conn, addr = server.accept()
-            Servidor.list_of_clients.append(conn) #Siempre vivo.
+            Servidor.list_of_clients.append(conn)
             print (addr[0] + " connected")
-            start_new_thread(ClienteHilo, (conn,)) #Se inicia un nuevo hilo , que invoca a la clase ClienteHilo. Siempre que While sea True se va a ejecutar.
-            #ClienteHilo (conn) esto haria el mismo trabajo que el start new thread, sin hilos, sería de forma secuencial. (MONOHILO)
+            start_new_thread(ClienteHilo, (conn,))
         conn.close()
         server.close()
 
@@ -56,7 +58,8 @@ class Servidor:
         if os.fork() == 0:
             os.close(pipein)
             cls.match_proccess_invoker(pipeout, name)
-            os.kill(os.getpid(), signal.SIGKILL)
+            #os.kill(os.getpid(), signal.SIGKILL)
+            sys.exit()
         else:
             os.close(pipeout)
             pipein_fd = os.fdopen(pipein)
@@ -78,26 +81,26 @@ class Servidor:
 
     @classmethod
     def match_proccess_invoker(cls, pipeout, name):
-        msg = match.match(name)  #* Llamo a la funcion match.
+        msg = match.match(name, self.archivo_tutores, self.archivo_extrangeros)  #* Llamo a la funcion match.
         if msg:
             os.write(pipeout, msg.encode('utf-8'))  #* Envio al padre el mensaje en bytes.
         os.close(pipeout)
 
 
 class ClienteHilo:
-    def __init__(self, conn): #El nuevo hilo ejecuta las siguientes instrucciones.
+    def __init__(self, conn):
         self.vivo = True
         self.conn = conn
         self.conn.send('Welcome to this chatroom!'.encode('utf-8'))
-        self._procesar_hilo() # Se invoca el método "_procesar_hilo"
+        self._procesar_hilo()
 
     def _procesar_hilo(self):
-        while self.vivo: #Siempre activo, hasta self.vivo = False. 115
+        while self.vivo:
             try:
-                message = self.conn.recv(2048) #Se encarga de estar escuchando permanentemente al Socket (Conexion)
+                message = self.conn.recv(2048)
                 if message:
                     # print(message)
-                    self._procesar_mensaje(message.decode('utf-8')) #Se fija que tipo de mensaje es (login/logoff/list/match)
+                    self._procesar_mensaje(message.decode('utf-8'))
                 else:
                     Servidor.remove(conn)
                     self.vivo = False
@@ -111,7 +114,7 @@ class ClienteHilo:
         elif mensaje.endswith('&logoff'):
             Servidor.remove(self.conn)
             Servidor.list_of_nicks.remove(self.usuario)
-            self.vivo = False #Equivalente a "exit" y se finaliza el hilo que comenzo en la linea 96, while self.vivo
+            self.vivo = False
             return
         elif mensaje == 'list\n':
             self.conn.send(str(Servidor.list_of_nicks).encode('utf-8'))
@@ -122,5 +125,23 @@ class ClienteHilo:
             message_to_send = "<" + self.usuario + "> " + mensaje
             Servidor.broadcast(message_to_send.encode('utf-8'), self.conn)
 
-if __name__ == "__main__": #1)"Main" Proceso principal con un Hilo principal, este ejecuta varias cosas.
-    Servidor()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    
+    parser.add_argument('--archivo_tutores', dest='archivo_tutores',
+                    help='sum the integers (default: find the max)')
+    parser.add_argument('--archivo_extrangeros', dest='archivo_extrangeros',
+                    help='sum the integers (default: find the max)')
+    parser.add_argument('--ip', dest='ip',
+                    help='sum the integers (default: find the max)')
+    parser.add_argument('--puerto', dest='port',
+                    help='sum the integers (default: find the max)')                                
+
+    args = parser.parse_args()
+
+    archivo_tutores = args.archivo_tutores  
+    archivo_extrangeros = args.archivo_extrangeros
+    ip=args.ip
+    port=int(args.port)
+
+    Servidor(archivo_tutores, archivo_extrangeros,ip,port)

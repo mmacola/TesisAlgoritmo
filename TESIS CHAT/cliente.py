@@ -4,11 +4,11 @@ import select
 import sys
 
 
-class Cliente:
+class Cliente: #El cliente no necesita crear ningun hilo, el cliente se conecta al servidor a travez del socket.
 
     def __init__(self, host='localhost', port=4000):
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        IP_address = input('Ingresar ip del servidor (default: localhost): ') or host
+        IP_address = input('Ingresar ip del servidor (default: localhost): ') or host #Si estoy conectado en la misma red pero en distintas computadoras, deberia ingresar la IP del servidor.
         Port = 4000
         self.server.connect((IP_address, Port))
         self.name=input('Ingresá tu email o tu nick: ')
@@ -26,29 +26,20 @@ class Cliente:
 
     def empezar_chat(self):
         while True:
-            # maintains a list of possible input streams
             sockets_list = [sys.stdin, self.server]
-
-            """ There are two possible input situations. Either the
-            user wants to give manual input to send to other people,
-            or the server is sending a message to be printed on the
-            screen. Select returns from sockets_list, the stream that
-            is reader for input. So for example, if the server wants
-            to send a message, then the if condition will hold true
-            below.If the user wants to send a message, the else
-            condition will evaluate as true"""
-            read_sockets,write_socket, error_socket = select.select(sockets_list,[],[])
+            #Estar escuchando todo lo que ingresas por teclado o escuchar el servidor, a travez del Select.
+            read_sockets,write_socket, error_socket = select.select(sockets_list,[],[]) #Este select es el que se usa para saber que hago (Interrupcion por teclado o mensaje del servidor).
 
             for socks in read_sockets:
-                if socks == self.server:
+                if socks == self.server: #Socket del server
                     message = socks.recv(2048)
-                    print(message.decode('utf-8'))
+                    print(message.decode('utf-8')) #Imprimo en pantalla lo que me enviaron
                     sys.stdout.write("-> ")
                     sys.stdout.flush()
 
                 else:
-                    message = sys.stdin.readline()
-                    self.procesar_mensaje(message)
+                    message = sys.stdin.readline() #Socket del teclado
+                    self.procesar_mensaje(message) #(logoff/exit) o envia mensaje al servidor.
                     sys.stdout.write("-> ")
                     sys.stdout.flush()
         self.server.close()
@@ -67,4 +58,4 @@ if __name__ == "__main__":
     print("'list': Lista de los alumnos conectados.")
     print("'exit': Sale de la aplicacion.")
     print("****************************************")
-    Cliente()
+    Cliente() #Se instancia al cliente.
